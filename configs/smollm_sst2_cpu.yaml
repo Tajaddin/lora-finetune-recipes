@@ -1,0 +1,47 @@
+# CPU-friendly default recipe.
+# Total wall-time on a single core: ~20 min for 500 training examples.
+
+base_model: HuggingFaceTB/SmolLM2-135M-Instruct
+dataset:
+  name: stanfordnlp/sst2
+  split_train: "train"
+  split_eval: "validation"
+  train_size: 500
+  eval_size: 200
+  text_field: sentence
+  label_field: label
+  label_names: ["negative", "positive"]
+
+task:
+  type: binary_classification
+  # Prompt template renders the input into the format the LM saw at training.
+  prompt_template: |
+    Review: {text}
+    Sentiment:
+  target_template: " {label}"
+  # Tokens the eval scorer compares against. Use single-token labels so the
+  # decision is a 1-token argmax — robust on tiny models.
+  label_tokens:
+    - " negative"
+    - " positive"
+
+training:
+  lora_r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "v_proj"]
+  num_epochs: 3
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-4
+  warmup_ratio: 0.06
+  max_steps: 0          # 0 = full epochs
+  max_seq_length: 128
+  bf16: false           # CPU
+  fp16: false
+  seed: 7
+  logging_steps: 10
+  save_total_limit: 1
+
+output:
+  dir: outputs/smollm_sst2_cpu

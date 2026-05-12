@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+.env
+*.log
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Training artifacts (but committing the smollm_sst2_cpu final adapter so reviewers can run eval without training)
+runs/
+checkpoints/
+outputs/**/checkpoint-*/
+wandb/
+*.pt
+*.optimizer.pt
+*.bin
+
+# HuggingFace cache pointers (the actual cache lives in ~/.cache)
+hf_cache/

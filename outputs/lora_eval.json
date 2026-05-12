@@ -1,0 +1,13 @@
+{
+  "adapter": "outputs\\smollm_sst2_cpu",
+  "accuracy": 0.755,
+  "n": 200,
+  "elapsed_secs": 25.5,
+  "throughput_per_sec": 7.9,
+  "confusion": {
+    "gold=1,pred=1": 60,
+    "gold=0,pred=0": 91,
+    "gold=1,pred=0": 39,
+    "gold=0,pred=1": 10
+  }
+}

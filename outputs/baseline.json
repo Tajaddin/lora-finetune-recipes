@@ -1,0 +1,13 @@
+{
+  "adapter": null,
+  "accuracy": 0.735,
+  "n": 200,
+  "elapsed_secs": 23.6,
+  "throughput_per_sec": 8.5,
+  "confusion": {
+    "gold=1,pred=0": 47,
+    "gold=0,pred=0": 95,
+    "gold=1,pred=1": 52,
+    "gold=0,pred=1": 6
+  }
+}

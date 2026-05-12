@@ -1,0 +1,43 @@
+# GPU recipe: Qwen2.5-0.5B-Instruct. Fits comfortably in 8 GB VRAM.
+# Total wall-time on a single RTX 3090: ~3 min for 1K training examples.
+
+base_model: Qwen/Qwen2.5-0.5B-Instruct
+dataset:
+  name: stanfordnlp/sst2
+  split_train: "train"
+  split_eval: "validation"
+  train_size: 1000
+  eval_size: 400
+  text_field: sentence
+  label_field: label
+  label_names: ["negative", "positive"]
+
+task:
+  type: binary_classification
+  prompt_template: |
+    Review: {text}
+    Sentiment:
+  target_template: " {label}"
+  label_tokens:
+    - " negative"
+    - " positive"
+
+training:
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
+  num_epochs: 3
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 2
+  learning_rate: 1.0e-4
+  warmup_ratio: 0.06
+  max_seq_length: 256
+  bf16: true            # GPU
+  fp16: false
+  seed: 7
+  logging_steps: 20
+  save_total_limit: 1
+
+output:
+  dir: outputs/qwen_sst2_gpu
